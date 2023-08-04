@@ -22,4 +22,7 @@ jobs:
       - name: Firebase Deploy
         run: |
           npm install -g firebase-tools
-          firebase deploy --token 1//0eBkCG0p02aR0CgYIARAAGA4SNwF-L9IrYXakTLU3omcuR5qkU9O0esOyruilmHX4yFt7vqc7HriskdSnVzlD0bXEmuPbu-L8V1Y
+          firebase login
+          firebase deploy --token "$FIREBASE_TOKEN"
+        env:
+          FIREBASE_TOKEN: '${{ secrets.FIREBASE_TOKEN }}'
