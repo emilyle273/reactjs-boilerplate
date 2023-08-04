@@ -1,6 +1,22 @@
-$bg-color: #e6e92c;
+// bootstrap customization
+@import './custombs';
+@import '~bootstrap/scss/bootstrap';
+// @font-face {
+//   font-family: 'Borel Regular';
+//   src: url('https://fonts.googleapis.com/css?family=Montserrat');
+//   font-style: normal;
+// }
 
-body {
-  background: $bg-color;
-  font-size: 20px;
+@font-face {
+  font-family: 'BorelRegular';
+  src:
+    local('BorelRegular'),
+    url('../fonts/Borel-Regular.ttf') format('truetype');
+  font-weight: bold;
+}
+
+.dark-btn {
+  background-color: #000;
+  color: #fff;
+  border-color: #000;
 }

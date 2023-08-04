@@ -11,9 +11,6 @@ const Dotenv = require('dotenv-webpack')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const webpack = require('webpack')
 
-// Cái dòng này giúp Editor gợi ý được các giá trị cho dòng code config ngay phía dưới nó
-// (giống như đang dùng Typescript vậy đó 😉)
-/** @type {(env: any, arg: {mode: string}) => import('webpack').Configuration} **/
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production'
   const isAnalyze = Boolean(env?.analyze)
@@ -33,7 +30,7 @@ module.exports = (env, argv) => {
       }
     },
     // File đầu vào cho webpack, file này thường là file import mọi file khác
-    entry: ['./src/index.tsx'],
+    entry: path.resolve(__dirname, 'src/index.tsx'),
     // Khai báo các module dùng trong webpack
     module: {
       rules: [
@@ -57,34 +54,23 @@ module.exports = (env, argv) => {
           ]
         },
         {
-          test: /\.(png|svg|jpg|gif)$/, // Dùng để import file ảnh, nếu có video/ảnh định dạng khác thì thêm vào đây
-          use: [
-            {
-              loader: 'file-loader',
-              options: {
-                name: isProduction ? 'static/media/[name].[contenthash:6].[ext]' : '[path][name].[ext]'
-              }
-            }
-          ]
+          test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
+          type: 'asset/resource'
         },
         {
-          test: /\.(eot|ttf|woff|woff2)$/, // Dùng để import font
-          use: [
-            {
-              loader: 'file-loader',
-              options: {
-                name: isProduction ? 'static/fonts/[name].[ext]' : '[path][name].[ext]'
-              }
-            }
-          ]
+          test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
+          type: 'asset/inline'
         }
       ]
     },
-
+    // output: {
+    //   filename: 'static/js/main.[contenthash:6].js', // Thêm mã hash tên file dựa vào content để tránh bị cache bởi CDN hay browser.
+    //   path: path.resolve(__dirname, 'dist'), // Build ra thư mục dist
+    //   publicPath: '/'
+    // },
     output: {
-      filename: 'static/js/main.[contenthash:6].js', // Thêm mã hash tên file dựa vào content để tránh bị cache bởi CDN hay browser.
-      path: path.resolve(__dirname, 'dist'), // Build ra thư mục dist
-      publicPath: '/'
+      path: path.resolve(__dirname, 'build'),
+      filename: 'bundle.js'
     },
     devServer: {
       hot: true, // enable Hot Module Replacement, kiểu như reload nhanh
